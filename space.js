@@ -32,11 +32,11 @@ function responseHandler() {
     receiveAPOD(this.responseText);
 }
 
-function requestAPOD() {
+function requestAPOD(dateString) {
     // Sends a GET request for the astronomy picture of the day
-    // Currently requests yesterdays date as New Zealand is a day ahead
+    // for the given date string in the format YYYY-MM-DD
     var requestURL = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"
-    requestURL += "&date=2020-08-18";
+    requestURL += "&date=" + dateString;
     var request = new XMLHttpRequest();
     
     request.addEventListener("load", responseHandler);
@@ -45,7 +45,17 @@ function requestAPOD() {
 }
 
 function init() {
-    requestAPOD();
+    // Currently a hack to get yesterdays date as New Zealand is a day ahead
+    var dateString = "";
+    var date = new Date();
+    
+    date.setDate(date.getDate() - 1);
+    dateString += date.getFullYear() + "-"
+    dateString += ((date.getMonth() < 10) ? "0":"") + date.getMonth() + "-";
+    dateString += ((date.getDate() < 10) ? "0":"") + date.getDate();
+    console.log(dateString);
+    
+    requestAPOD(dateString);
 }
 
 // Initialise the page once it's loaded
